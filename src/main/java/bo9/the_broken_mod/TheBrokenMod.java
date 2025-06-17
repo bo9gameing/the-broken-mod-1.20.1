@@ -1,5 +1,6 @@
 package bo9.the_broken_mod;
 
+import bo9.the_broken_mod.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
@@ -12,5 +13,6 @@ public class TheBrokenMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Hello Fabric world!");
+		ModItems.registerModItems();
 	}
 }
