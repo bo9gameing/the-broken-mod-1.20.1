@@ -1,3 +1,17 @@
 {
-  "item.the-broken-mod.test_item": "Tessting :3"
+  "item.the-broken-mod.test_item": "Tessting :3",
+  "item.the-broken-mod.rift_item": "rift :3",
+  "item.the-broken-mod.corupem_ingit": "corupem ingit",
+  "item.the-broken-mod.corupem_nuget": "corupem nuget",
+  "item.the-broken-mod.raw_copper_infested": "infested raw copper",
+  "item.the-broken-mod.raw_iron_infested": "infested raw iron",
+  "item.the-broken-mod.raw_gold_infested": "infested raw gold",
+  "item.the-broken-mod.redstone_infested": "infested redstone",
+  "item.the-broken-mod.diamond_infested": "infested diamond",
+
+
+  "block.the-broken-mod.rift_block": "rift block",
+
+
+  "itemgroup.main": "main group"
 }

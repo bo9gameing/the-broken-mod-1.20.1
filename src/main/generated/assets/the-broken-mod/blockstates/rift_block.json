@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "charge=0": {
+      "model": "the-broken-mod:block/rift_block"
+    },
+    "charge=1": {
+      "model": "the-broken-mod:block/rift_block_1"
+    },
+    "charge=2": {
+      "model": "the-broken-mod:block/rift_block_2"
+    },
+    "charge=3": {
+      "model": "the-broken-mod:block/rift_block_3"
+    },
+    "charge=4": {
+      "model": "the-broken-mod:block/rift_block_4"
+    }
+  }
+}
