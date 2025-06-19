@@ -30,6 +30,7 @@ public class ModItemGroups {
 
 
                         entries.add(ModBlock.RIFT_BLOCK);
+                        entries.add(ModBlock.COMPUTER_DECODER);
                     })).build());
 
 
