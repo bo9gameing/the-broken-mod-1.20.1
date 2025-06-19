@@ -12,6 +12,8 @@ import net.minecraft.util.Identifier;
 
 import java.util.function.Consumer;
 
+
+
 public class ModModelProvider extends FabricModelProvider {
 
     public ModModelProvider(FabricDataOutput output) {
@@ -21,6 +23,7 @@ public class ModModelProvider extends FabricModelProvider {
     @Override
     public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
         //blockStateModelGenerator.registerSimpleState();
+
 
     }
 

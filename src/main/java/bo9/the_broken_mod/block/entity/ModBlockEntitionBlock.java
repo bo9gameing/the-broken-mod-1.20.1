@@ -9,10 +9,10 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class ModBlockEntitionBlock {
-    //public static final BlockEntityType<Computer_Decoder_Block_Entity> COMPUTER_DECODER_BLOCK_ENTITY =
-    //        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(TheBrokenMod.MOD_ID,"computer_decoder_be"),
-     //               FabricBlockEntityTypeBuilder.create(Computer_Decoder_Block_Entity::new,
-     //                       ModBlock.COMPUTER_DECODER).build());
+    public static final BlockEntityType<Computer_Decoder_Entity> COMPUTER_DECODER_BLOCK_ENTITY =
+            Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(TheBrokenMod.MOD_ID,"computer_decoder_be"),
+                 FabricBlockEntityTypeBuilder.create(Computer_Decoder_Entity::new,
+                        ModBlock.COMPUTER_DECODER).build());
 
 
 
