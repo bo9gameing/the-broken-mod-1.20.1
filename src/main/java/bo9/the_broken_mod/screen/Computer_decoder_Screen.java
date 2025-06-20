@@ -23,8 +23,8 @@ public class Computer_decoder_Screen extends HandledScreen<Computer_decoder_Scre
         RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.setShaderColor(1f,1f,1f,1f);
         RenderSystem.setShaderTexture(0, TEXTURE);
-        int x = (width - backgroundWidth) /20;
-        int y = (width - backgroundHeight) /30;
+        int x = (width - backgroundWidth) /2;
+        int y = (height - backgroundHeight) /2;
 
 
         context.drawTexture(TEXTURE, x, y,0,0, backgroundWidth,backgroundHeight);
@@ -33,7 +33,7 @@ public class Computer_decoder_Screen extends HandledScreen<Computer_decoder_Scre
 
     private void renderProgressArrow(DrawContext context, int x, int y) {
         if(handler.isCrafting()){
-            context.drawTexture(TEXTURE, x + 44, y + 19, 0, 167, 95, handler.getScaledProgress());
+            context.drawTexture(TEXTURE, x + 47, y + 33, 0, 169, handler.getScaledProgress() ,15);
 //95,28
         }
     }
@@ -45,6 +45,5 @@ public class Computer_decoder_Screen extends HandledScreen<Computer_decoder_Scre
         drawMouseoverTooltip(context, mouseX, mouseY);
     }
 
-    private void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
-    }
+
 }

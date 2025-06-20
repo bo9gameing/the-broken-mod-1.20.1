@@ -23,7 +23,7 @@ public class ModBlock {
     public static final Block COMPUTER_DECODER = registerBlock("computer_decoder",
           new Computer_Decoder(AbstractBlock.Settings.create().nonOpaque()));
     public static final Block RIFT_BLOCK_1 = registerBlock("rift_block_1",
-            new Computer_Decoder(AbstractBlock.Settings.create().strength(100f)));
+            new Computer_Decoder(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
 
 
     private static Block registerBlock(String name, Block block) {

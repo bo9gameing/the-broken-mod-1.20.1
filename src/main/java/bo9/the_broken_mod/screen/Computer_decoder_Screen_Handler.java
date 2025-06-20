@@ -20,9 +20,9 @@ public class Computer_decoder_Screen_Handler extends ScreenHandler {
     }
 
 
-    private  Inventory inventory;
-    private  PropertyDelegate propertyDelegate;
-    public  Computer_Decoder_Entity blockEntity;
+    private final    Inventory inventory;
+    private final   PropertyDelegate propertyDelegate;
+    public  final   Computer_Decoder_Entity blockEntity;
 
     public Computer_decoder_Screen_Handler(int syncId, PlayerInventory inventory, PacketByteBuf buf){
         this(syncId, inventory, inventory.player.getWorld().getBlockEntity(buf.readBlockPos()),
@@ -31,11 +31,10 @@ public class Computer_decoder_Screen_Handler extends ScreenHandler {
 
 
 
-    protected Computer_decoder_Screen_Handler(@Nullable ScreenHandlerType<?> type, int syncId) {
-        super(type, syncId);
-    }
 
-    public Computer_decoder_Screen_Handler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity, PropertyDelegate arrayPropertyDelegate) {
+
+    public Computer_decoder_Screen_Handler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity,
+                                           PropertyDelegate arrayPropertyDelegate) {
         super(ModScreenhandlers.COMPUTER_DECODER_SCREEN_HANDLER, syncId);
         checkSize(((Inventory) blockEntity), 2);
         this.inventory = ((Inventory) blockEntity);
@@ -43,9 +42,9 @@ public class Computer_decoder_Screen_Handler extends ScreenHandler {
         this.propertyDelegate = arrayPropertyDelegate;
         this.blockEntity = ((Computer_Decoder_Entity) blockEntity);
 
-        this.addSlot(new Slot(inventory, 0, 21,14));
-        this.addSlot(new Slot(inventory, 2, 97,94));
-        this.addSlot(new Slot(inventory, 3, 123,94));
+        this.addSlot(new Slot(inventory, 0, 25,33));
+        this.addSlot(new Slot(inventory, 1, 116,15));
+        this.addSlot(new Slot(inventory, 2, 151,33));
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
@@ -57,7 +56,7 @@ public class Computer_decoder_Screen_Handler extends ScreenHandler {
     public int getScaledProgress(){
         int conversion = this.propertyDelegate.get(0);
         int maxConversion = this.propertyDelegate.get(1);
-        int progressArrowSize = 26;
+        int progressArrowSize = 99;
 
         return maxConversion != 0 && conversion != 0 ? conversion * progressArrowSize / maxConversion : 0;
     }
@@ -66,7 +65,7 @@ public class Computer_decoder_Screen_Handler extends ScreenHandler {
     public ItemStack quickMove(PlayerEntity player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
+        if(slot.hasStack()) {
             ItemStack originalStack = slot.getStack();
             newStack = originalStack.copy();
             if (invSlot < this.inventory.size()) {
@@ -83,7 +82,6 @@ public class Computer_decoder_Screen_Handler extends ScreenHandler {
                 slot.markDirty();
             }
         }
-
         return newStack;
     }
 

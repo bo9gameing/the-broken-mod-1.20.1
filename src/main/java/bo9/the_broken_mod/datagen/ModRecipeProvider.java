@@ -4,6 +4,7 @@ package bo9.the_broken_mod.datagen;
 import bo9.the_broken_mod.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.recipe.book.RecipeCategory;
 
@@ -17,7 +18,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
     }
 
     @Override
-    public void generate(Consumer<RecipeJsonProvider> exporter){
+    public void generate(RecipeExporter exporter){
 
         offerReversibleCompactingRecipes(exporter, RecipeCategory.MISC, ModItems.CORUPEM_NUGET, RecipeCategory.MISC, ModItems.CORUPEM_INGIT);
 

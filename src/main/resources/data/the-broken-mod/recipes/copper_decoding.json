@@ -1,0 +1,11 @@
+{
+  "type": "the-broken-mod:computer_decoding",
+  "ingredients": [
+    {
+      "item":"the-broken-mod:raw_copper_infested"
+    }
+  ],
+  "output": {
+    "item": "minecraft:raw_copper"
+  }
+}

@@ -1,6 +1,7 @@
 package bo9.the_broken_mod.block.entity;
 
 import bo9.the_broken_mod.item.ModItems;
+import bo9.the_broken_mod.recipe.Computer_decoder_Recipes;
 import bo9.the_broken_mod.screen.Computer_decoder_Screen_Handler;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
@@ -8,11 +9,12 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -21,6 +23,8 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class Computer_Decoder_Entity extends BlockEntity implements ExtendedScreenHandlerFactory, ImplementedInventory{
 
@@ -101,50 +105,47 @@ public class Computer_Decoder_Entity extends BlockEntity implements ExtendedScre
         return new Computer_decoder_Screen_Handler(syncId, playerInventory,this, this.propertyDelegate);
     }
 
+
     public void tick(World world, BlockPos pos, BlockState state) {
         if(world.isClient()) {
             return;
         }
 
-        if(isOutputSlotEmptyOrReceable()) {
-            if(this.hasRecipe()){
+        if(isOutputSlotEmptyOrReceivable()) {
+            if(this.hasRecipe()) {
                 this.increaseCraftProgress();
                 markDirty(world, pos, state);
 
-
-                if(hasCraftingFinish()){
-                    this.craftingItem();
+                if(hasCraftingFinished()) {
+                    this.craftItem();
                     this.resetProgress();
-
                 }
-            }else{
+            } else {
                 this.resetProgress();
             }
-        }else{
+        } else {
             this.resetProgress();
-            markDirty(world,pos,state);
+            markDirty(world, pos, state);
         }
-
-
-
     }
 
     private void resetProgress() {
         this.progress = 0;
     }
 
-    private void craftingItem() {
+    private void craftItem() {
+        Optional<RecipeEntry<Computer_decoder_Recipes>> recipe = getCurrentRecipe();
+
         this.removeStack(INPUT_SLOT, 1);
-        ItemStack result1 = new ItemStack(ModItems.CORUPEM_NUGET);
-        ItemStack result2 = new ItemStack(Items.RAW_COPPER);
+        ItemStack result = new ItemStack(ModItems.CORUPEM_NUGET);
 
-        this.setStack(OUTPUT_SLOT_1, new ItemStack(result1.getItem(), getStack(OUTPUT_SLOT_1).getCount() + result1.getCount()));
-        this.setStack(OUTPUT_SLOT_2, new ItemStack(result2.getItem(), getStack(OUTPUT_SLOT_2).getCount() + result2.getCount()));
-
+        this.setStack(OUTPUT_SLOT_1, new ItemStack(recipe.get().value().getResult(null).getItem(),
+                getStack(OUTPUT_SLOT_1).getCount() + recipe.get().value().getResult(null).getCount()));
+        this.setStack(OUTPUT_SLOT_2, new ItemStack(result.getItem(), getStack(OUTPUT_SLOT_2).getCount() + result.getCount()));
     }
 
-    private boolean hasCraftingFinish() {
-return progress >= maxprogress;
+    private boolean hasCraftingFinished() {
+        return progress >= maxprogress;
     }
 
     private void increaseCraftProgress() {
@@ -152,27 +153,33 @@ return progress >= maxprogress;
     }
 
     private boolean hasRecipe() {
-        ItemStack result1 = new ItemStack(ModItems.CORUPEM_NUGET);
-        ItemStack result2 = new ItemStack(Items.RAW_COPPER);
-        boolean hasInput = getStack(INPUT_SLOT).getItem() == ModItems.RAW_COPPER_INFESTED;
+        Optional<RecipeEntry<Computer_decoder_Recipes>> recipe = getCurrentRecipe();
 
-        return hasInput && canInsertAmountIntoOutputSlot(result1,result2) && canInsertItemIntoOutputSlot(result1.getItem(), result2.getItem());
+        ItemStack result = new ItemStack(ModItems.CORUPEM_NUGET);
+
+        return recipe.isPresent() && canInsertAmountIntoOutputSlot(recipe.get().value().getResult(null), result)
+                && canInsertItemIntoOutputSlot(recipe.get().value().getResult(null).getItem(), result.getItem());
     }
 
-    private boolean canInsertAmountIntoOutputSlot(ItemStack result1, ItemStack result2) {
-        return this.getStack(OUTPUT_SLOT_1).getCount() + result1.getCount() > getStack(OUTPUT_SLOT_1).getMaxCount() &&
-                this.getStack(OUTPUT_SLOT_2).getCount() + result2.getCount() > getStack(OUTPUT_SLOT_2).getMaxCount();
+    private Optional<RecipeEntry<Computer_decoder_Recipes>> getCurrentRecipe() {
+        SimpleInventory inv = new SimpleInventory(this.size());
+        for(int i = 0; i < this.size(); i++) {
+            inv.setStack(i, this.getStack(i));
+        }
+
+        return getWorld().getRecipeManager().getFirstMatch(Computer_decoder_Recipes.Type.INSTANCE, inv, getWorld());
     }
 
-    private boolean canInsertItemIntoOutputSlot(Item item1, Item item2) {
-        return  this.getStack(OUTPUT_SLOT_1).getItem() == item1 || this.getStack(OUTPUT_SLOT_1).isEmpty() &&
-                this.getStack(OUTPUT_SLOT_2).getItem() == item2 || this.getStack(OUTPUT_SLOT_2).isEmpty();
+    private boolean canInsertItemIntoOutputSlot(Item item, Item resultItem) {
+        return this.getStack(OUTPUT_SLOT_1).getItem() == item || this.getStack(OUTPUT_SLOT_1).isEmpty();
     }
 
-
-
-    private boolean isOutputSlotEmptyOrReceable() {
-        return  this.getStack(OUTPUT_SLOT_1).isEmpty() || this.getStack(OUTPUT_SLOT_1).getCount() < this.getStack(OUTPUT_SLOT_1).getMaxCount() &&
-                this.getStack(OUTPUT_SLOT_2).isEmpty() || this.getStack(OUTPUT_SLOT_2).getCount() < this.getStack(OUTPUT_SLOT_2).getMaxCount();
+    private boolean canInsertAmountIntoOutputSlot(ItemStack result, ItemStack itemStack) {
+        return this.getStack(OUTPUT_SLOT_1).getCount() + result.getCount() <= getStack(OUTPUT_SLOT_1).getMaxCount();
     }
+
+    private boolean isOutputSlotEmptyOrReceivable() {
+        return this.getStack(OUTPUT_SLOT_1).isEmpty() || this.getStack(OUTPUT_SLOT_1).getCount() < this.getStack(OUTPUT_SLOT_1).getMaxCount();
+    }
+
 }
