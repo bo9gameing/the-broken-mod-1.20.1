@@ -27,13 +27,13 @@ import net.minecraft.world.World;
 
 public class Rift_Block extends Block {
     public static final IntProperty CHARGE = IntProperty.of("charge", 0 , 4);
-    public static final BooleanProperty ACTVATED = BooleanProperty.of("actvated");
+
 
 
     public Rift_Block(Settings settings) {
         super(settings);
         setDefaultState(this.getDefaultState().with(CHARGE, 0));
-        setDefaultState(this.getDefaultState().with(ACTVATED, false));
+
     }
 
     @Override
@@ -44,9 +44,6 @@ public class Rift_Block extends Block {
                 return ActionResult.PASS;
             } else if (isCharge(itemStack) && canCharge(state)) {
                 world.setBlockState(pos, state.with( CHARGE,(Integer)state.get(CHARGE) + 1));
-            } else if (isCharge(itemStack) && !canCharge(state)) {
-                world.setBlockState(pos, state.cycle(ACTVATED));
-                world.playSound(player, pos, SoundEvents.BLOCK_NOTE_BLOCK_IMITATE_PIGLIN.value(), SoundCategory.BLOCKS, 100f, 10f);
             }
         }
 
@@ -66,6 +63,6 @@ public class Rift_Block extends Block {
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(CHARGE);
-        builder.add(ACTVATED);
+
     }
 }

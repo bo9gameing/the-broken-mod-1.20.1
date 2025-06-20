@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "the-broken-mod:corupem_ingit"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "the-broken-mod:corupem_nuget"
+  }
+}
